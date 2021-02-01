@@ -1,34 +1,138 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js ボイラープレート
 
-## Getting Started
+色々回って調べていると、結局どれを最低限 install すれば動くのか？と悩むことがあったので現状のものを残しておく。
+基本的に利用することになりそうなツールのための、必要最低限のパッケージとその設定ファイル等を一通り用意した。
 
-First, run the development server:
+- TypeScirpt
+- Jest, react-testing-library
+- ESlint, prettier
+- styled-components
+- Storybook
 
-```bash
-npm run dev
-# or
-yarn dev
+ディレクトリ構成（特に _.test.tsx とか _.stories.tsx とかをディレクトリ分けずに置くかどうか）とかは好みで。
+
+## 各パッケージに関連する設定
+
+### TypeScirpt
+
+TypeScript を使わない理由はないため入れる。
+
+#### 関連パッケージ
+
+- typescript
+- @types/react, @types/node 等の TypeScript 用型定義パッケージ
+
+#### 設定ファイル
+
+- `tsconfig.json`
+  `"compilerOptions": { paths: {}} `
+  で、例えば`src/components/Button.tsx` のファイルを `import {} from @/components/Button` というふうに絶対パスでインポートできるように設定している。  
+  他の設定ファイルにもこの設定と合わせるための設定があるので注意。
+
+### Jest, react-testing-library
+
+テストのため。
+`Jest` は js のテストフレームワーク、`react-testing-library` は react コンポーネントをテストするためのライブラリ。 `enzyme` というライブラリも使われることがあるらしいが好みとか、プロジェクトの要望に合わせて選択する。  
+今回は `react-testing-library` を利用する
+
+#### 関連パッケージ
+
+- jest
+- @types/jest
+- ts-jest
+- @testing-library/jest-dom
+- @testing-library/react
+- @testing-library/user-event
+- identity-obj-proxy
+
+`identity-obj-proxy` は CSS Modules を使う場合に必要。
+
+#### 設定ファイル
+
+- `jest.config.js`
+- `setupTests.ts`
+  `'@testing-library/jest-dom'` をテストファイルでインポートしないとコンポーネントのテストができないが、いちいち毎回インポート書かなくていいようにここに書いて config で呼んでいる。
+- `src/lib/testUtils/testUtils.tsx`
+  ファイルの場所は好きなように。
+  例えば今回使っている `styled-components` の `<ThemeProvider/>` のように、テストしたいコンポーネントが依存するプロバイダー等がある場合に、テストファイルでいちいち書くのが面倒なので、  
+  testing-library のデフォルトの `render` の代わりに、インターフェイスを変えずにそれらのプロバイダー等を入れ込んで置く `customRender` を定義している。
+
+### ESlint, Prettier
+
+基本的にはコードの規約とかフォーマットはこれらに任せる。
+
+#### 関連パッケージ
+
+- prettier
+- eslint
+- eslint-config-prettier
+- @typescript-eslint/eslint-plugin
+- @typescript-eslint/parser
+- eslint-plugin-react
+- eslint-plugin-react-hooks
+- eslint-plugin-jsx-a11y
+  `eslint-plugin-prettier` というパッケージが今まで使われていたが、最近公式で非推奨になったらしい。prettier の実行は VScode 等のエディタや IDE で行わせる。
+  eslint のルールとして `airbnb` や `google` のものがあるが好みで入れる。
+  `eslint-plugin-jsx-a11y`は最低限のアクセシビリティを保つように忠告してくれるのでとりあえずいれている。
+
+#### 設定ファイル
+
+- `.eslintignore`
+- `.eslintrc.json`
+- `.prettierrc.json`
+
+### styled-components
+
+コンポーネントのスタイリングについては最近は他の選択肢も結構あるので `styled-components`一択という感じではなさそうだがとりあえず今回はこれをいれている。
+
+#### 関連パッケージ
+
+- styled-components
+- @types/styled-components
+- babel-plugin-styled-components
+
+#### 設定ファイル
+
+- `.babelrc`
+
+```
+"plugins": [
+    [
+      "babel-plugin-styled-components",
+      {
+        "ssr": true,
+        "displayName": true
+      }
+    ]
+  ]
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+の部分。
+あと今回は書いてないが、SSR する場合は `src/pages/_document.tsx` に SSR 用に色々書く必要がある。
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- `src/lib/styled-components/theme.ts`
+  `theme` を定義して `<ThemeProvider/>`に渡している。
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+### Storybook
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+コンポーネントをカタログ化して管理できるツール。
 
-## Learn More
+#### 関連パッケージ
 
-To learn more about Next.js, take a look at the following resources:
+- @storybook/react
+- @storybook/addon-a11y
+- @storybook/addon-actions
+- @storybook/addon-knobs
+- @storybook/addon-links
+- @storybook/addon-viewport
+- storybook-addon-designs
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+必須なのは `@storybook/react` のみだが、汎用性のありそうな addon はとりあえずいれておいた。
+`storybook-addon-designs` は Storybook 上に Figma 等のデザインを表示させることができる addon だが、使ってみたところ  
+デザインの表示はできても CSS 等が確認できるわけではないので微妙かもしれないと思った。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+#### 設定ファイル
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- `.storybook/main.js`
+- `.storybook/preview.js`
+  testing-library の時と同様に、Storybook 上で `<ThemeProvider/>` などに依存している場合はここでラップするなどしておく。
