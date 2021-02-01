@@ -25,9 +25,10 @@ TypeScript を使わない理由はないため入れる。
 #### 設定ファイル
 
 - `tsconfig.json`
-  `"compilerOptions": { paths: {}} `
-  で、例えば`src/components/Button.tsx` のファイルを `import {} from @/components/Button` というふうに絶対パスでインポートできるように設定している。
-  他の設定ファイルにもこの設定と合わせるための設定があるので注意。
+
+`"compilerOptions": { paths: {}} `
+で、例えば`src/components/Button.tsx` のファイルを `import {} from @/components/Button` というふうに絶対パスでインポートできるように設定している。
+他の設定ファイルにもこの設定と合わせるための設定があるので注意。
 
 ### Jest, react-testing-library
 
@@ -58,7 +59,7 @@ TypeScript を使わない理由はないため入れる。
 
 ファイルの場所は好きなように。
 例えば今回使っている `styled-components` の `<ThemeProvider/>` のように、テストしたいコンポーネントが依存するプロバイダー等がある場合に、テストファイルでいちいち書くのが面倒なので、
-testing-library のデフォルトの `render` の代わりに、インターフェイスを変えずにそれらのプロバイダー等を入れ込んで置く `customRender` を定義している。
+testing-library のデフォルトの `render` の代わりに、それらのプロバイダー等を入れ込む `customRender` を定義している。
 
 ### ESlint, Prettier
 
