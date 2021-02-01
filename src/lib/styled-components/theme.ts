@@ -6,30 +6,24 @@ const colors = {
     black: '#25282B',
   },
   primary: {
-    default: '#003B59',
+    default: '#28385E',
     dark: '#082838',
     light: '#126FA1',
-    100: '#0D568A',
-    300: '#42A0C6',
-    400: '#69C7E2',
-    background: '#F2F9F',
   },
-  secondary: { default: '#C9355F', dark: '#AC2859', light: '#D45F7F' },
-  lightGray: {
-    1: '#E0E1E2',
-    2: '#E5E5E5',
-    3: '#DDDDDD',
+  secondary: {
+    default: '#00b5ad',
+    dark: '#319795',
+    light: '#e1f7f7',
   },
-  gray: {
-    3: '#666666',
-  },
+  lightGray: '#DDDDDD',
+  gray: '#666666',
 } as const;
 
 export const theme = {
   colors,
   buttonColors: {
     normal: {
-      default: colors.gray[3],
+      default: colors.gray,
     },
     primary: {
       default: colors.primary.default,

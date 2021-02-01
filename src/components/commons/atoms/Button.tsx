@@ -69,7 +69,7 @@ const StyledButton = styled.button<StyledButtonProps>`
         color: ${theme.buttonColors.normal.default};
         background-color: ${theme.colors.white};
         font-weight: normal;
-        border: 1px solid ${theme.colors.lightGray[3]};
+        border: 1px solid ${theme.colors.lightGray};
       `;
     }
     if (variant === 'outlined') {
