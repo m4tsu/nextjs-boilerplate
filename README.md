@@ -55,6 +55,18 @@ TypeScript を使わない理由はないため入れる。
 
 `'@testing-library/jest-dom'` をテストファイルでインポートしないとコンポーネントのテストができないが、いちいち毎回インポート書かなくていいようにここに書いて config で呼んでいる。
 
+- `tsconfig.test.json`
+
+テスト用の jsconfig。
+
+```
+"compilerOptions": {
+  "jsx": "react-jsxdev"
+}
+```
+
+`react-jsxdev`　は React17 以降の場合。
+
 - `src/lib/testUtils/testUtils.tsx`
 
 ファイルの場所は好きなように。
