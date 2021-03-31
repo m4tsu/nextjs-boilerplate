@@ -1,6 +1,5 @@
 import { Button } from '@/components/commons/atoms/Button';
-import { render } from '@/lib/testUtils/testUtils';
-import { screen } from '@testing-library/react';
+import { render } from '@/testUtils/testUtils';
 import userEvent from '@testing-library/user-event';
 
 describe('Button', () => {
@@ -15,8 +14,10 @@ describe('Button', () => {
     const handleClick = () => {
       count += 1;
     };
-    render(<Button onClick={handleClick}>テストボタン</Button>);
-    userEvent.click(screen.getByRole('button'));
+    const { getByRole } = render(
+      <Button onClick={handleClick}>テストボタン</Button>
+    );
+    userEvent.click(getByRole('button'));
     expect(count).toBe(1);
   });
 });

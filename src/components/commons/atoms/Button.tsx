@@ -1,17 +1,18 @@
 import { theme } from '@/lib/styled-components/theme';
+import { assertNever } from '@/utils/assertNever';
 import { ButtonHTMLAttributes, FC } from 'react';
 import styled, { css } from 'styled-components';
 
 type HTMLButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
 type StyledButtonProps = {
-  colorScheme?: 'normal' | 'primary' | 'secondary';
-  fullWidth?: boolean;
-  variant?: 'outlined' | 'contained';
-  size?: 'sm' | 'md' | 'lg';
+  colorScheme: 'normal' | 'primary' | 'secondary';
+  fullWidth: boolean;
+  variant: 'outlined' | 'contained';
+  size: 'sm' | 'md' | 'lg';
 };
 
-export type ButtonProps = StyledButtonProps &
+export type ButtonProps = Partial<StyledButtonProps> &
   Omit<HTMLButtonProps, keyof StyledButtonProps>;
 
 const getButtonColors = (colorScheme: string) => {
@@ -25,7 +26,7 @@ const getButtonColors = (colorScheme: string) => {
   }
 };
 
-const getPaddingX = (size: StyledButtonProps['size'] = 'md') => {
+const getPaddingX = (size: StyledButtonProps['size']) => {
   switch (size) {
     case 'sm': {
       return '0.75rem';
@@ -38,8 +39,7 @@ const getPaddingX = (size: StyledButtonProps['size'] = 'md') => {
     }
     default: {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const _: never = size;
-      throw new Error('invalid Button size');
+      return assertNever(size);
     }
   }
 };
@@ -62,7 +62,7 @@ const StyledButton = styled.button<StyledButtonProps>`
   width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
   padding: ${({ size }) => `0.75rem ${getPaddingX(size)}`};
   ${(props) => {
-    const { colorScheme = 'normal', variant, theme } = props;
+    const { colorScheme, variant, theme } = props;
     const colors = getButtonColors(colorScheme);
     if (colorScheme === 'normal') {
       return css`
@@ -102,6 +102,23 @@ const StyledButton = styled.button<StyledButtonProps>`
   }};
 `;
 
-export const Button: FC<ButtonProps> = ({ children, ...props }) => {
-  return <StyledButton {...props}>{children}</StyledButton>;
+export const Button: FC<ButtonProps> = ({
+  children,
+  colorScheme = 'normal',
+  variant = 'contained',
+  fullWidth = false,
+  size = 'md',
+  ...props
+}) => {
+  return (
+    <StyledButton
+      colorScheme={colorScheme}
+      variant={variant}
+      fullWidth={fullWidth}
+      size={size}
+      {...props}
+    >
+      {children}
+    </StyledButton>
+  );
 };

@@ -1,19 +1,21 @@
 const path = require('path');
 
 module.exports = {
-  stories: ['../src/stories/**/*.stories.@(tsx|mdx)'],
+  stories: ['../stories/**/*.stories.tsx'],
   addons: [
-    '@storybook/addon-links',
-    '@storybook/addon-actions',
-    '@storybook/addon-knobs',
+    '@storybook/addon-essentials',
     '@storybook/addon-a11y',
-    '@storybook/addon-viewport',
     'storybook-addon-designs',
   ],
   webpackFinal: async (config) => {
     config.resolve.alias = {
       '@': path.resolve(__dirname, '../src'),
     };
+    config.module.rules.push({
+      test: /\.scss$/,
+      use: ['style-loader', 'css-loader', 'sass-loader'],
+      include: path.resolve(__dirname, '../src')
+    })
     return config;
   },
 };

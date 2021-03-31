@@ -1,6 +1,6 @@
 # Next.js ボイラープレート
 
-色々回って調べていると、結局どれを最低限 install すれば動くのか？と悩むことがあったので現状のものを残しておく。
+色々回って調べていると、結局どれを最低限 install すれば動くのか？どう設定するべきなのか？と悩むことがあったので現状のものを残しておく。
 基本的に利用することになりそうなツールのための、必要最低限のパッケージとその設定ファイル等を一通り用意した。
 
 - TypeScirpt
@@ -9,7 +9,7 @@
 - styled-components
 - Storybook
 
-ディレクトリ構成（特に _.test.tsx とか _.stories.tsx とかをディレクトリ分けずに置くかどうか）とかは、どうするのがベストかまだ良くわかっていない。
+ディレクトリ構成（特に ~.test.tsx とか ~.stories.tsx とかをディレクトリ分けずに置くかどうか）とかは、どうするのがベストかまだ良くわかっていない。
 
 ## 各パッケージに関連する設定
 
@@ -139,13 +139,10 @@ eslint のルールとして `airbnb` や `google` のものがあるが好み�
 
 - @storybook/react
 - @storybook/addon-a11y
-- @storybook/addon-actions
-- @storybook/addon-knobs
-- @storybook/addon-links
-- @storybook/addon-viewport
+- @storybook/essentials
 - storybook-addon-designs
 
-必須なのは `@storybook/react` のみだが、汎用性のありそうな addon はとりあえずいれておいた。
+必須なのは `@storybook/react` のみだが、基本的に使いたくなる addon は `@storybook/essentials` に入っている。
 `storybook-addon-designs` は Storybook 上に Figma 等のデザインを表示させることができる addon だが、使ってみたところ
 デザインの表示はできても CSS 等が確認できるわけではないので微妙かもしれないと思った。
 
